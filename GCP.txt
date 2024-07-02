@@ -1,0 +1,13 @@
+                                                      Google cloud platform 
+
+
+ spring boot application  basic deploy process with cloud CLI
+   
+--> 1
+	cmd -> gcloud init
+
+
+--> 2 - in the target folder that I create the jar file location run the below cmd
+
+	cmd --> gcloud app deploy  jar file name 
+	
