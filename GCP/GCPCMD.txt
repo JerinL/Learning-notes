@@ -17,3 +17,14 @@ gclod project set-->
 	gloud config set project [project-Id]
 
 
+Docker build and push -->
+	docker build -t gcr.io/my-project/my-app:latest .
+	docker push gcr.io/my-project/my-app:latest
+
+
+deploy the image to cloud run -->
+	gcloud run deploy my-app --image gcr.io/my-project/my-app:latest --platform managed --region us-central1
+
+
+
+
