@@ -11,3 +11,78 @@
 
 	cmd --> gcloud app deploy  jar file name 
 	
+
+	GCP deploy proccess  using jenkins -> dockerbuild -> push to artifactry image container -> deploy the image to cloud run
+
+	jenkins stages 
+
+	pipeline {
+    agent any
+    tools {
+        jdk 'jdk17' // Replace with your desired Java tool name
+        maven 'maven'
+    }
+
+    environment {
+        GOOGLE_APPLICATION_CREDENTIALS = credentials('gcp-key')
+        GIT_TOKEN = credentials('git-token')
+        GIT_REPO = "https://${GIT_TOKEN}@github.com/JerinL/cloud-gcp-jenkins.git"
+        GCP_PROJECT_ID = 'studied-yen-423602-b9'
+        IMAGE_NAME = "gcr.io/${GCP_PROJECT_ID}/google-cloud-platform" // Image name in GCR
+        BRANCH_TO_COMPILE = "${params.BRANCH_TO_COMPILE}"
+    }
+
+    stages {
+        stage('Clone') {
+            steps {
+                git branch: "${BRANCH_TO_COMPILE}", url: "${GIT_REPO}"
+                // Print directory structure after cloning
+                sh 'ls -la'
+            }
+        }
+
+        stage('Build Maven Project') {
+            steps {
+                // If pom.xml is in a subdirectory, navigate to that directory
+                // sh 'cd subdirectory && mvn clean install'
+                sh 'mvn clean'
+                sh 'mvn istall'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh "docker build -t ${IMAGE_NAME}:${env.BUILD_NUMBER} ."
+            }
+        }
+
+        stage('Push Docker Image to GCR') {
+            steps {
+                script {
+                    sh "gcloud auth activate-service-account --key-file=${GOOGLE_APPLICATION_CREDENTIALS}"
+                    sh "gcloud auth configure-docker"
+                    sh "docker push ${IMAGE_NAME}:${env.BUILD_NUMBER}"
+                }
+            }
+        }
+
+        stage('Deploy to GCP') {
+            steps {
+                script {
+                    // Replace with your GCP deployment script or commands
+                    sh "gcloud run deploy google-cloud-platform --image=${IMAGE_NAME}:${env.BUILD_NUMBER} --platform managed --region us-central1 --allow-unauthenticated"
+                }
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully'
+        }
+
+        failure {
+            echo 'Pipeline failed'
+        }
+    }
+} 
