@@ -28,3 +28,58 @@ deploy the image to cloud run -->
 
 
 
+connect redis to app engine follow the link -->
+      https://cloud.google.com/memorystore/docs/redis/connect-redis-instance-standard
+
+
+
+	  cloud build automated deploy -->
+	   cloud build using build trigger ,
+	   after build the image will save into the artifactry directory,
+	   using that image deploy the image to cloud run  
+
+	   make in automated by using cloudbuild.yamal file 
+
+these are the steps
+
+
+	  steps:
+  #  - name: 'gcr.io/cloud-builders/gcloud'
+  #    args: ['container', 'images', 'delete', 'gcr.io/studied-yen-423602-b9/gcloud-build-image:your-tag', '--force-delete-tags']
+
+  - name: 'gcr.io/cloud-builders/mvn'
+    args: ['clean', 'package']
+    dir: '.'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/studied-yen-423602-b9/gcloud-build-image:tag', '.']
+    dir: '.'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/studied-yen-423602-b9/gcloud-build-image:tag']
+
+#this line for deploy the lates image to cloud run 
+	  - name: 'gcr.io/cloud-builders/gcloud'                                                      // to deploy the docker image in cloud build
+    args: [
+      'run', 'deploy', 'gcloud-build-test-img',
+      '--image', 'gcr.io/sandbox-427408/gcloud-build-test-img:$SHORT_SHA',
+      '--platform', 'managed',
+      '--region', 'us-central1',
+      '--allow-unauthenticated'
+    ]
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+
+images:
+  - 'gcr.io/sandbox-427408/gcloud-build-test-img:$SHORT_SHA'
+
+#  - name: 'gcr.io/cloud-builders/gcloud'
+#    entrypoint: 'bash'
+#    args:
+#      - '-c'
+#      - |
+#        # Delete old image tag if it exists
+#        gcloud container images delete gcr.io/studied-yen-423602-b9/gcloud-build-image:old-tag --quiet
+
+# Specify service account if needed
+serviceAccount: your-service-account@studied-yen-423602-b9.iam.gserviceaccount.com 
