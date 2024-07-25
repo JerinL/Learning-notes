@@ -1,4 +1,4 @@
-kafka run in git bash 
+kafka run in git bash  (if you u git bash dont furget to add bash infront of the cmd)
 need to be in bin folder 
 zookeeper run cmd ->
     bash zookeeper-server-start.sh ../config/zookeeper.properties
@@ -13,6 +13,7 @@ list of all topic ->
 
 describe all the topic cmd ->
      bash kafka-topics.sh --bootstrap-server localhost:9092 --describe
+
 
 Topic: topic-kafka-test TopicId: jGeK7ENiQsyhjKzW6Rl5Wg PartitionCount: 3       ReplicationFactor: 1    Configs:
         Topic: topic-kafka-test Partition: 0    Leader: 0       Replicas: 0     Isr: 0
@@ -31,10 +32,28 @@ Topic: topic-kafka-test TopicId: jGeK7ENiQsyhjKzW6Rl5Wg PartitionCount: 3       
         Topic: topic-kafka-test Partition: 2    Leader: 0       Replicas: 0     Isr: 0
 
 
+run producer message 
+    -> bash bin/kafka-console-producer.sh --broker-list localhost:9092 --topic "(topic name)""
+
+run consumer message ->                                                         (topic name)
+        bash bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic topic-kafka-jerin --from-beginning
+
+log check ->      relocate this file from tmp to kafkabin /00000000000000000000.log 
+    bin/kafka-dump-log.sh --cluster-metadata-decoder --files bin/00000000000000000000.log --print-data-log  
+
+find status cmd ->
+     bash kafka-metadata-quorum.sh --bootstrap-server localhost:9092 describe --status
+
+find the replicas smd ->
+    bash kafka-metadata-quorum.sh --bootstrap-server localhost:9092 describe --replication
+
+          
+    
+
 for windows ->
     .\zookeeper-server-start.bat ..\..\config\zookeeper.properties
 
-    .\kafka-server-start.bat ..\../config/server.propertie
+    .\kafka-server-start.bat ..\../config/server.properties
     .\kafka-server-start.bat D:\kafka_2.12-3.7.1\config\server.properties
 
 
@@ -42,6 +61,11 @@ for windows ->
 
     .\kafka-topics.bat --bootstrap-server localhost:9092 --describe
 
+6. Produce message
+ bin/kafka-console-producer.sh --broker-list localhost:9092 --topic New Topic
+
+7. consume message
+ bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic New Topic --from-beginning
 
 stopping produces -> 
 shortcut key -> ctrl + C
@@ -49,3 +73,135 @@ shortcut key -> ctrl + C
 
 send the file  cmd ->  
     Get-Content "C:\Users\Jerin\Downloads\invite (1).ics" | .\kafka-console-producer.bat --bootstrap-server localhost:9092 --topic topic-kafka-test
+
+
+
+
+
+
+
+
+
+
+                                      Run Kafka without Running Zookeeper 
+
+	-> we need to run the  kafka  with kraft mode , by that step we can run the kafka 	without running zookeeeper 
+
+                                                    Usage  
+
+	->  kafka no longer relies on zookeeper for managing  all the metadata  
+
+ 
+
+                                                Kafka with KRaft 
+
+Kafka can be run using KRaft mode using local scripts and downloaded files or the docker image. Follow one of the sections below but not both to start the kafka server. 
+
+Using downloaded files 
+
+                           Generate a Cluster UUID 
+
+$ KAFKA_CLUSTER_ID="$(bin/kafka-storage.sh random-uuid)" 
+ 
+                          Format Log Directories 
+
+$ bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c config/kraft/server.properties 
+
+                         Start the Kafka Server 
+
+$ bin/kafka-server-start.sh config/kraft/server.properties 
+
+ 
+
+ 
+
+ 
+
+
+ check the running port cmd ->
+
+     netstat -ano | findstr :9092
+
+
+
+  TCP    0.0.0.0:9092           0.0.0.0:0              LISTENING       15376
+  TCP    127.0.0.1:9092         127.0.0.1:53254        ESTABLISHED     15376
+  TCP    127.0.0.1:9092         127.0.0.1:53255        ESTABLISHED     15376
+  TCP    127.0.0.1:9092         127.0.0.1:53258        ESTABLISHED     15376
+  TCP    127.0.0.1:53254        127.0.0.1:9092         ESTABLISHED     22764
+  TCP    127.0.0.1:53255        127.0.0.1:9092         ESTABLISHED     22764
+  TCP    127.0.0.1:53258        127.0.0.1:9092         ESTABLISHED     18708
+  TCP    [::]:9092              [::]:0  
+
+  terminate the running port cmd ->
+    taskkill /PID 15376 /F
+
+
+
+
+
+
+
+
+
+Open Source Kafka Startup in local
+Start Zookeeper Server
+
+sh bin/zookeeper-server-start.sh config/zookeeper.properties
+
+Start Kafka Server / Broker
+
+sh bin/kafka-server-start.sh config/server.properties
+
+Create topic
+
+sh bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic NewTopic --partitions 3 --replication-factor 1
+
+list out all topic names
+
+sh bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
+
+Describe topics
+
+sh bin/kafka-topics.sh --bootstrap-server localhost:9092 --describe --topic NewTopic
+
+Produce message
+
+sh bin/kafka-console-producer.sh --broker-list localhost:9092 --topic NewTopic
+
+consume message
+
+sh bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic NewTopic --from-beginning
+
+Confluent Kafka Community Edition in local
+Start Zookeeper Server
+
+bin/zookeeper-server-start etc/kafka/zookeeper.properties
+
+Start Kafka Server / Broker
+
+bin/kafka-server-start etc/kafka/server.properties
+
+Create topic
+
+bin/kafka-topics --bootstrap-server localhost:9092 --create --topic NewTopic1 --partitions 3 --replication-factor 1
+
+list out all topic names
+
+bin/kafka-topics --bootstrap-server localhost:9092 --list
+
+Describe topics
+
+bin/kafka-topics --bootstrap-server localhost:9092 --describe --topic NewTopic1
+
+Produce message
+
+bin/kafka-console-producer --broker-list localhost:9092 --topic NewTopic1
+
+consume message
+
+bin/kafka-console-consumer --bootstrap-server localhost:9092 --topic NewTopic1 --from-beginning 
+
+Send CSV File data to kafka
+
+bin/kafka-console-producer --broker-list localhost:9092 --topic NewTopic1 <bin/customers.csv

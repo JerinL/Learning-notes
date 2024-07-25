@@ -45,3 +45,17 @@ Kafka Architecture & Components
         Open Source: Apache Kafka
         Commercial distribution: Confluent Kafka
         Managed Kafka service: confluent & AWS
+
+
+
+
+
+
+Benefits of Kafka without ZK
+you can achieve various benefits like
+1. Eliminating system complexities
+I
+2. Data redundancy while running Kafka without
+Zookeeper.
+3. Simplified Kafka architecture without any third-
+party service dependencies.
