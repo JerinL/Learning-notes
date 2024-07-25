@@ -1,0 +1,47 @@
+• What is Kafka ?
+
+• Apache Kafka is an open-source distributed event streaming platform
+    Creating Real-time Stream
+    Processing Real-time Stream
+
+
+
+
+• Where does Kafka come from?
+
+    Kafka was originally developed at in
+    open sourced in early 2011
+
+
+
+• Why do we need Kafka ?
+
+     for npo data loss
+     for reduse the connection between the application.
+    kafka can deliver the message one anpplication to another aplication ,
+    may be if the second application is offline , kafka can deliver the message whwnever the application came online 
+
+
+• How does it work (High-level overview)
+
+
+        kafka have publisher and subscriber
+        publisher will publish the one message the  message broker will get the message and deliver to the subscriber 
+
+
+
+Kafka Architecture & Components
+    producer,
+    broker,
+    consumer,
+    cluster,
+    topic,
+    partition,
+    offset,
+    consumergroup,
+    zookeeper
+
+    Kafka Installation
+        Open Source: Apache Kafka
+        Commercial distribution: Confluent Kafka
+        Managed Kafka service: confluent & AWS

@@ -1,0 +1,5 @@
+how to push the sourse code one repo to another repo ->
+        git remote add destination https://github.com/JerinL/cloud-build-services.git
+        git remote set-url origin https://github.com/JerinL/cloud-build-services.git
+        git push --mirror destination
+        git push --mirror origin

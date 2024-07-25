@@ -30,3 +30,51 @@ added code
 gcp sa keys
 github token
 jenkins crede
+
+
+
+pipeline{
+  tools{
+    maven 'maven'
+    jdk 'jdk17'
+  }
+
+  environment{
+    GIT_REPO =   value
+    GCP-PROJECTID = value
+    GIT_TOKEN = IMAGENAME
+
+  }
+
+  stages{
+
+    stage(clone){
+      steps{
+
+      }
+    }
+
+    stage(build maven ){
+      steps{
+
+      }
+    }
+
+    stage(){
+      steps{
+
+      }
+    }
+
+    post{
+      success{
+        echo 'successful'
+      }
+
+    failure{
+      echo 'pipeline failure '
+    }
+    }
+  }
+
+}
