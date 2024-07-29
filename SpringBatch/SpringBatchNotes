@@ -1,3 +1,6 @@
+
+spring batch repo -> https://github.com/JerinL/spring-batch-demo.git
+
 Spring batch is used for procced the millions of data from the filrs or database
     Like->
 reading the millions of data from the csv file and write the data to database 
@@ -12,4 +15,11 @@ What is Partitioning
 1-500 Thread 1
 • 501-1000 → Thread 2
 
+
+• 1-250 Th1
+• • 251-500 Th2
+• 501-750 Th3
+• 751-100 Th4
+
 https://howtodoinjava.com/spring-batch/spring-boot-batch-tutorial-example/
+
