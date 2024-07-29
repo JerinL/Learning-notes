@@ -1,0 +1,64 @@
+docker-compose.yml file properties  
+
+version: '3.1'
+
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: localhost
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+
+
+
+      cmd ->
+            run the docker file ->
+         docker compose -f docker-compose.yml up -d  
+
+           - it will install  the zookeeper and  kafka
+           - after the isnallation make it run the servers
+
+
+       PS D:\kafka-Installation> docker exec -it kafka /bin/sh  (for get the docker path)
+# ls
+bin  boot  dev  etc  home  kafka  lib  lib64  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var
+# cd opt
+# ls
+kafka  kafka_2.13-2.8.1  overrides
+# cd kafka_2.13-2.8.1
+# pwd
+/opt/kafka_2.13-2.8.1
+# ls
+LICENSE  NOTICE  bin  config  libs  licenses  logs  site-docs
+# cd bin
+# pwd
+/opt/kafka_2.13-2.8.1/bin
+# ls
+connect-distributed.sh        kafka-dump-log.sh                    kafka-storage.sh
+connect-mirror-maker.sh       kafka-features.sh                    kafka-streams-application-reset.sh
+connect-standalone.sh         kafka-leader-election.sh             kafka-topics.sh
+kafka-acls.sh                 kafka-log-dirs.sh                    kafka-verifiable-consumer.sh
+kafka-broker-api-versions.sh  kafka-metadata-shell.sh              kafka-verifiable-producer.sh
+kafka-cluster.sh              kafka-mirror-maker.sh                trogdor.sh
+kafka-configs.sh              kafka-preferred-replica-election.sh  windows
+kafka-console-consumer.sh     kafka-producer-perf-test.sh          zookeeper-security-migration.sh
+kafka-console-producer.sh     kafka-reassign-partitions.sh         zookeeper-server-start.sh
+kafka-consumer-groups.sh      kafka-replica-verification.sh        zookeeper-server-stop.sh
+kafka-consumer-perf-test.sh   kafka-run-class.sh                   zookeeper-shell.sh
+kafka-delegation-tokens.sh    kafka-server-start.sh
+kafka-delete-records.sh       kafka-server-stop.sh
+#    
+
+/bin/sh: 11: /kafka-topics.sh: not found
+# kafka-topics.sh --bootstrap-server localhost:9092 --create --topic NewTopic --partitions 3 --replication-factor 1
+Created topic NewTopic.
+#

@@ -159,7 +159,7 @@ sh bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic NewTop
 
 list out all topic names
 
-sh bin/kafka-topics.sh --bootstrap-server localhost:9092 --list
+sh bin/ 
 
 Describe topics
 

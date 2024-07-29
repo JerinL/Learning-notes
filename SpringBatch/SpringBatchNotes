@@ -1,0 +1,15 @@
+Spring batch is used for procced the millions of data from the filrs or database
+    Like->
+reading the millions of data from the csv file and write the data to database 
+or
+reading the millions of data from the database  and write the data to csv file 
+
+
+What is Partitioning
+. multiple threads to process a range of data sets
+• 1,2,3,4,5,6,7,8, 1000
+..........
+1-500 Thread 1
+• 501-1000 → Thread 2
+
+https://howtodoinjava.com/spring-batch/spring-boot-batch-tutorial-example/
