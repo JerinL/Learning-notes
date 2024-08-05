@@ -86,3 +86,130 @@
         }
     }
 } 
+
+
+
+
+
+
+
+
+
+
+
+Gcp nots for important services
+
+
+Google App Engine
+Best Use Cases:
+Simple to moderately complex web applications
+Straightforward deployment and infrastructure management
+When to Use:
+When a Platform-as-a-Service (PaaS) solution is needed to handle infrastructure management
+Deployment Process:
+Set up Cloud SQL instance
+Configure Spring Boot app for Cloud SQL
+Create app.yaml files for frontend and backend
+Deploy using gcloud app deploy
+Pros:
+Easy to use
+Automatic scaling
+No server management
+Cons:
+Limited customization
+Potential for vendor lock-in
+ 
+
+Google Cloud Run
+Best Use Cases:
+Containerized applications
+Microservices and serverless workloads
+When to Use:
+Need scalable, stateless services with quick deployments
+Deployment Steps:
+Containerize your application (e.g., Docker)
+Upload the container to a registry (e.g., Google Artifact Registry)
+Deploy using gcloud run deploy
+Pros:
+Supports any language and framework
+Automatic scaling
+Pay per use
+Cons:
+Cold start latency
+Limited stateful capabilities
+ 
+
+Google Cloud Run
+Best For:
+Containerized applications
+Quick scaling and pay-per-use pricing
+When to Use:
+Containers with minimal infrastructure management
+Deployment Process:
+Create a Dockerfile for your app
+Build and push the Docker image to Container Registry
+Deploy to Cloud Run using gcloud CLI or Cloud Console
+Pros:
+Fast deployments
+Automatic scaling to zero
+Pay only for usage
+Cons:
+Cold starts may affect performance
+Limited to HTTP(S) workloads
+ 
+
+Google Compute Engine
+Best For:
+Applications needing full control over infrastructure
+Specific OS configurations
+When to Use:
+Maximum flexibility or specific server requirements
+Deployment Process:
+Create a VM instance
+Install Node.js and a web server (e.g., Nginx)
+Transfer built React files to the VM
+Configure the web server to serve your app
+Pros:
+Full environment control
+Potentially cost-effective for stable workloads
+Cons:
+More management and maintenance required
+ 
+ 
+Cloud Storage + Load Balancer
+Best For:
+Static websites with custom caching and load balancing
+When to Use:
+Cost-effective solution for static content with custom domains and SSL
+Deployment Process:
+Create a Cloud Storage bucket
+Upload your React app to the bucket
+Set up a load balancer with a backend bucket
+Configure SSL and domain settings
+Pros:
+Cost-effective for static content
+High scalability
+Cons:
+More complex setup
+Limited to static content
+
+ 
+
+Kubernetes Engine (GKE)
+Best For:
+Complex applications needing orchestration of multiple services
+When to Use:
+Part of a microservices architecture or needs advanced deployment strategies
+Deployment Process:
+Containerize your React app
+Create Kubernetes deployment and service YAML files
+Deploy to GKE using kubectl commands
+Pros:
+Highly scalable
+Ideal for microservices
+Advanced deployment options (rolling updates, canary deployments)
+Cons:
+Steeper learning curve
+Overkill for simple applications
+
+ 
