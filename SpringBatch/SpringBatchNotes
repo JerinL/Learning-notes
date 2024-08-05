@@ -16,10 +16,10 @@ What is Partitioning
 • 501-1000 → Thread 2
 
 
-• 1-250 Th1
-• • 251-500 Th2
-• 501-750 Th3
-• 751-100 Th4
+• 1-250 Thread1
+• • 251-500 Thread2
+• 501-750 Thread3
+• 751-100 Thread4
 
 https://howtodoinjava.com/spring-batch/spring-boot-batch-tutorial-example/
 
