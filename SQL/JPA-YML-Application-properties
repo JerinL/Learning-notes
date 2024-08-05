@@ -1,0 +1,99 @@
+# Database properties
+spring.datasource.url=
+spring.datasource.username=
+spring.datasource.password=
+spring.datasource.driver-class-name=org.postgresql.Driver
+server.servlet.contextPath=/laulama
+
+#spring.datasource.url=jdbc:My url
+#spring.datasource.username=
+#spring.datasource.password=
+#spring.datasource.driver-class-name=org.postgresql.Driver
+
+
+spring.profiles.active=${ENV_NAME}
+
+# JPA properties
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+#spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+#spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.properties.hibernate.id.new_generator_mappings=false
+spring.jpa.properties.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+
+
+server.port=9080
+
+aws.default-region=us-east-1
+redis.hostname=${REDIS_HOST:localhost}
+redis.port=${REDIS_PORT:6379}
+redis.issl=${REDIS_ISSL:false}
+redis.timeout=${REDIS_TIMEOUT:2000}
+redis.auth=${REDIS_AUTH:auth}
+client.connectTimeout=${CONNECT_TIMEOUT:10000}
+client.readTimeout=${READ_TIMEOUT:10000}
+cors.url=${CORS_URL:*}
+
+
+cognito.clientId=
+cognito.userPoolId=
+cognito.region=${EMS_V2_COGNITO_REGION:us-east-1}
+cognito.connectionTimeout= ${EMS_V2_COGNITO_CONNECTION:2000}
+cognito.readTimeout= ${EMS_V2_COGNITO_READ_TIMEOUT:2000}
+cognito.expiresIn= 3600
+
+
+management.endpoint.health.show-details=always
+management.endpoints.web.base-path=/
+
+springdoc.swagger-ui.path=/swagger-ui.html
+
+spring.flyway.enabled=true
+spring.flyway.repair=true
+spring.flyway.locations=classpath:db/migration
+spring.flyway.baseline-on-migrate=true
+
+sql.script.path=src//main//resources//db.migration//V1__create_post_table.sql
+
+
+
+
+
+yml file 
+
+spring:
+  datasource:
+
+    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=test
+    username: 
+    password: 
+
+    driver: org.postgresql.Driver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      dialect: org.hibernate.dialect.PostgreSQLDialect
+      database-platform: org.hibernate.dialect.postgreSQLDialect
+      ddl-auto: update
+  batch:
+    initialize-schema: ALWAYS
+    job:
+      enabled: false
+
+
+
+#spring:
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/postgres?currentSchema=s2l
+#    username: 
+#    password: 
+#    driver-class-name: org.postgresql.Driver
+#
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    show-sql: true
+#    database-platform: org.hibernate.dialect.PostgreSQLDialect
+#
