@@ -1,0 +1,9 @@
+EurukaServer default port
+ server.port=8761
+
+ EurukaServer configuration in application properties
+    spring.application.name=euruka.server
+    server.port=8761
+
+    eureka.client.register-with-eureka=false
+    eureka.client.fetch-registry=false
