@@ -1,0 +1,2 @@
+gcloud functions deploy acc-backend --entry-point org.example.SendMailFunction --runtime java17 --source . --trigger-http --region us-central1  
+            (org.example.SendMailFunction )-> file location

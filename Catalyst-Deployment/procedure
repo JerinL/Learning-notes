@@ -1,0 +1,15 @@
+intsll catalyst cmd ->
+                npm install -g zcatalyst-cli
+
+check the catalyst version after instalation
+                catalyst --version
+
+
+catalyst login ->
+                catalyst login
+
+initialize catalyst ->
+            catalyst init 
+
+run the project through catalyst ->
+            catalyst serve
