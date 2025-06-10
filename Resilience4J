@@ -157,3 +157,148 @@ State	Controlled By	Behavior
 CLOSED	slidingWindowSize, failureRateThreshold	Normal traffic allowed. If failures hit 50%, circuit goes OPEN.
 OPEN	waitDurationInOpenState	No calls are allowed. All go to fallback. Waits 5s before testing again.
 HALF-OPEN	permittedNumberOfCallsInHalfOpenState	Tests 3 calls. If they succeed → go back to CLOSED. Fail → back to OPEN.
+
+
+
+
+server:
+  port: 8000
+
+spring:
+  application:
+    name: vlc-api-gateway
+
+  cloud:
+    gateway:
+      routes:
+        # === 1. RECEIVE-TREASURY-DATA ===
+        - id: receive-treasury-data-service
+          uri: lb://RECEIVE-TREASURY-DATA
+          predicates:
+            - Path=/treasury/**
+          filters:
+            - name: Retry
+              args:
+                retries: 3
+                statuses: BAD_GATEWAY, GATEWAY_TIMEOUT, SERVICE_UNAVAILABLE
+                methods: GET, POST
+                backoff:
+                  firstBackoff: 500ms
+                  maxBackoff: 2s
+                  factor: 2
+                  basedOnPreviousValue: true
+            - name: CircuitBreaker
+              args:
+                name: receiveTreasuryCB
+                fallbackUri: forward:/fallback/treasury
+            - name: AddResponseHeader
+              args:
+                name: X-Fallback-Reason
+                value: "Circuit Breaker Triggered - Receive Treasury"
+
+        # === 2. PUSH-TREASURY-DATA ===
+        - id: push-treasury-data-service
+          uri: lb://PUSH-TREASURY-DATA
+          predicates:
+            - Path=/push/**
+          filters:
+            - name: Retry
+              args:
+                retries: 3
+                statuses: BAD_GATEWAY, GATEWAY_TIMEOUT, SERVICE_UNAVAILABLE
+                methods: POST
+                backoff:
+                  firstBackoff: 500ms
+                  maxBackoff: 2s
+                  factor: 2
+                  basedOnPreviousValue: true
+            - name: CircuitBreaker
+              args:
+                name: pushTreasuryCB
+                fallbackUri: forward:/fallback/push
+            - name: AddResponseHeader
+              args:
+                name: X-Fallback-Reason
+                value: "Circuit Breaker Triggered - Push Treasury"
+
+        # === 3. MANAGE-TREASURY-DATA ===
+        - id: manage-treasury-data-service
+          uri: lb://MANAGE-TREASURY-DATA
+          predicates:
+            - Path=/manage/**
+          filters:
+            - name: Retry
+              args:
+                retries: 3
+                statuses: BAD_GATEWAY, GATEWAY_TIMEOUT, SERVICE_UNAVAILABLE
+                methods: GET, POST, PUT, DELETE
+                backoff:
+                  firstBackoff: 500ms
+                  maxBackoff: 2s
+                  factor: 2
+                  basedOnPreviousValue: true
+            - name: CircuitBreaker
+              args:
+                name: manageTreasuryCB
+                fallbackUri: forward:/fallback/manage
+            - name: AddResponseHeader
+              args:
+                name: X-Fallback-Reason
+                value: "Circuit Breaker Triggered - Manage Treasury"
+
+---
+
+### ✅ Resilience4j Config (Optional if needed in Gateway)
+
+#If you want to add Resilience4j-specific config:
+#
+resilience4j:
+  circuitbreaker:
+    instances:
+      receiveTreasuryCB:
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        slidingWindowType: COUNT_BASED
+
+      pushTreasuryCB:
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        slidingWindowType: COUNT_BASED
+
+      manageTreasuryCB:
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        slidingWindowType: COUNT_BASED
+        
+        
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    eureka-server-connect-timeout-seconds: 10
+    eureka-server-read-timeout-seconds: 10
+  instance:
+    hostname: localhost        
+    
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always 
